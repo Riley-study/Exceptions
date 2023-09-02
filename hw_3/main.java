@@ -32,14 +32,13 @@ public class main {
         for (int i = 0; i < parsingAnswer.length; i++) {
             System.out.print("[ " + parsingAnswer[i] + " ] ");
         }
-        System.out.println("код ошибки: " + sizeValidation(parsingAnswer));
-
+        sizeValidation(parsingAnswer);
     }
 
 
     public static String requestFromUser() {
         Scanner request = new Scanner(System.in);
-        System.out.println("Введите ФИО, дату рождения (dd.mm.yyyy), номер телефона (89111111111), пол (f/m)");
+        System.out.println("Введите ФИО, дату рождения (dd.mm.yyyy), номер телефона (89111111111), пол (f/m) через запятую");
         String userUnswer = request.nextLine();
         return userUnswer;
     }
@@ -48,16 +47,18 @@ public class main {
         return userUnswer.split("[,]");
     }
 
-    public static int sizeValidation(String [] userUnswerAfterParsing){
+    public static void sizeValidation(String [] userUnswerAfterParsing){
         int amountOfElements = 4;
         int errorCode = 0;
         if (userUnswerAfterParsing.length > amountOfElements){
             errorCode = 1;
-        }
-        if (userUnswerAfterParsing.length < amountOfElements) {
+            System.out.println("Код ошибки: " + errorCode + "\nВведено больше параметров, чем требовалось, либо неверный формат данных");
+        }else if (userUnswerAfterParsing.length < amountOfElements) {
             errorCode = 2;
+            System.out.println("Код ошибки: " + errorCode + "\nВведено меньше параметров, чем требовалось, либо неверный формат данных");
+        } else {
+            System.out.println("\nПроверка прошла успешно.");
         }
-        return errorCode;
     }
 
 
