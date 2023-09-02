@@ -1,5 +1,7 @@
 package hw_3;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 public class main {
@@ -22,46 +24,125 @@ public class main {
 <Фамилия><Имя><Отчество><датарождения> <номертелефона><пол>
 Однофамильцы должны записаться в один и тот же файл, в отдельные строки.
 
+Медведева Наталья Сергеевна 24.04.1988 89654322345 f
 Медведева Наталья Сергеевна, 24.04.1988, 89654322345, f
      */
 
     public static void main(String[] args) {
-
+        // Запрашиваем у юзера данные в определенном порядке
         String initUserAnswer = requestFromUser();
+        // парсим полученную строку и проверяем количество элементов в массиве, если количество не совпадает
+        // с требованиями, выдает код ошибки и текстовые комментарии, что пошло не так.
+
         String [] parsingAnswer = parsingUserAnswer(initUserAnswer);
         for (int i = 0; i < parsingAnswer.length; i++) {
             System.out.print("[ " + parsingAnswer[i] + " ] ");
         }
-        sizeValidation(parsingAnswer);
+
+        if (!sizeValidation(parsingAnswer)) {
+            return;
+        }
+        // далее проверяем каждый элемент введенных данных с выбрасыванием исключений, если что-то не соответствует запросу
+        if (!isValidFullName(parsingAnswer[1])) {
+            System.out.println("фио");
+            return;
+        }
+        if (!isValidFullName(parsingAnswer[2])) {
+            System.out.println("фио");
+            return;
+        }
+        if (!isValidFullName(parsingAnswer[3])) {
+            System.out.println("фио");
+            return;
+        }
+        if (!isValidGender(parsingAnswer[6])) {
+            System.out.println("Некорректный пол");
+            return;
+        }
+        if (!isValidPhoneNumber(parsingAnswer[5])) {
+            System.out.println("Некорректный номер телефона");
+            return;
+        }
+        if (!isValidBirthDate(parsingAnswer[4])) {
+            System.out.println("Некорректная дата рождения");
+            return;
+        }
+
+
+
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     public static String requestFromUser() {
         Scanner request = new Scanner(System.in);
-        System.out.println("Введите ФИО, дату рождения (dd.mm.yyyy), номер телефона (89111111111), пол (f/m) через запятую");
+        System.out.println("Введите ФИО, дату рождения (dd.mm.yyyy), номер телефона (89111111111), пол (f/m) через пробел");
         String userUnswer = request.nextLine();
         return userUnswer;
     }
 
     public static String[] parsingUserAnswer(String userUnswer) {
-        return userUnswer.split("[,]");
+       // return userUnswer.split("[,]");
+        return userUnswer.trim().replaceAll("\\s+ ", " ").split(" ");
     }
 
-    public static void sizeValidation(String [] userUnswerAfterParsing){
-        int amountOfElements = 4;
+    public static boolean sizeValidation(String [] userUnswerAfterParsing){
+        int amountOfElements = 6;
         int errorCode = 0;
         if (userUnswerAfterParsing.length > amountOfElements){
             errorCode = 1;
-            System.out.println("Код ошибки: " + errorCode + "\nВведено больше параметров, чем требовалось, либо неверный формат данных");
-        }else if (userUnswerAfterParsing.length < amountOfElements) {
+            System.out.println("\nКод ошибки: " + errorCode + "\nВведено больше параметров, чем требовалось, " +
+                    "либо неверный формат данных");
+            return false;
+        } else if (userUnswerAfterParsing.length < amountOfElements) {
             errorCode = 2;
-            System.out.println("Код ошибки: " + errorCode + "\nВведено меньше параметров, чем требовалось, либо неверный формат данных");
+            System.out.println("\nКод ошибки: " + errorCode + "\nВведено меньше параметров, чем требовалось, " +
+                    "либо неверный формат данных");
+            return false;
         } else {
-            System.out.println("\nПроверка прошла успешно.");
+            //System.out.println("\nПроверка прошла успешно.");
+            return true;
         }
     }
 
+    // Проверка корректности ФИО
+    public static boolean isValidFullName(String name) throws IllegalArgumentException {
+        try {
 
+            if (name.matches("\\s[А-Яа-я]+\\s")) {
+                return true;
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Некорректное ФИО");
+            return false;
+        }
+    }
 
+    // Проверка корректности номера телефона
+    public static boolean isValidPhoneNumber(String phoneNumber) throws IllegalArgumentException {
+         if (phoneNumber.matches("\\d{11}")) {
+             return true;
+         } else {
+             throw new IllegalArgumentException("Некорректный номер телефона");
+         }
+    }
 
+    // Проверка корректности даты рождения
+    public static boolean isValidBirthDate(String birthDate) throws IllegalArgumentException {
+        if (birthDate.matches(" \\d{2}\\.\\d{2}\\.\\d{4} +")) {
+            return true;
+        } else {
+            throw new IllegalArgumentException("Некорректная дата рождения");
+        }
+    }
+
+    // Проверка корректности пола
+    public static boolean isValidGender(String gender) throws IllegalArgumentException {
+        if (gender.equalsIgnoreCase("m") || gender.equalsIgnoreCase("f")) {
+            return true;
+        } else {
+            throw new IllegalArgumentException("Некорректно введен пол");
+        }
+    }
 }
