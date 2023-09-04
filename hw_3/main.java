@@ -1,8 +1,6 @@
 package hw_3;
 
-import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Scanner;
 
 public class main {
@@ -43,13 +41,13 @@ public class main {
 
         // После успешной проверки создается файл с названием по фамилии, введенной в запросе.
         // Однофамильцы записываются в один и тот же файл, в отдельные строки.
+
         String path = "hw_3/" + parsingAnswer[0];
         String text = initUserAnswer;
         String filename = parsingAnswer[0];
 
         try ( FileWriter writer = new FileWriter(path, true)){
             writer.write("\n" + text);
-//            writer.append("\n " + text);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -59,7 +57,7 @@ public class main {
 
     ////////////////////////////////////////////// Methods ///////////////////////////////////////////////////
 
-
+// запрос данных у пользователя
     public static String requestFromUser() {
         Scanner request = new Scanner(System.in);
         System.out.println("Введите ФИО, дату рождения (dd.mm.yyyy), номер телефона (89111111111), пол (f/m) через пробел");
@@ -67,11 +65,12 @@ public class main {
         return userUnswer;
     }
 
+    // разделение запроса на части по пробелам
     public static String[] parsingUserAnswer(String userUnswer) {
-       // return userUnswer.split("[,]");
         return userUnswer.trim().replaceAll("\\s+ ", " ").split(" ");
     }
 
+// проверка количество элементов в ответе пользователя, вывод кода ошибки
     public static boolean sizeValidation(String [] userUnswerAfterParsing){
         int amountOfElements = 6;
         int errorCode = 0;
