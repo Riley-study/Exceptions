@@ -1,7 +1,5 @@
 package hw_3;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Scanner;
 
 public class main {
@@ -35,36 +33,36 @@ public class main {
         // с требованиями, выдает код ошибки и текстовые комментарии, что пошло не так.
 
         String [] parsingAnswer = parsingUserAnswer(initUserAnswer);
-        for (int i = 0; i < parsingAnswer.length; i++) {
-            System.out.print("[ " + parsingAnswer[i] + " ] ");
-        }
+//        for (int i = 0; i < parsingAnswer.length; i++) {
+//            System.out.print("[ " + parsingAnswer[i] + " ] ");
+//        }
+
 
         if (!sizeValidation(parsingAnswer)) {
             return;
         }
-        // далее проверяем каждый элемент введенных данных с выбрасыванием исключений, если что-то не соответствует запросу
-        if (!isValidFullName(parsingAnswer[1])) {
-            System.out.println("фио");
+    // далее проверяем каждый элемент введенных данных с выбрасыванием исключения, если что-то не соответствует запросу
+
+        if (!isValidName(parsingAnswer[0])){
+            return;
+        };
+
+        if (!isValidName(parsingAnswer[1])) {
             return;
         }
-        if (!isValidFullName(parsingAnswer[2])) {
-            System.out.println("фио");
+        if (!isValidName(parsingAnswer[2])) {
             return;
         }
-        if (!isValidFullName(parsingAnswer[3])) {
-            System.out.println("фио");
+        if (isValidBirthDate(parsingAnswer[3])){
+            System.out.println("yes");
+        } else {
+            throw new IllegalArgumentException("Некорректная дата рождения");
+        }
+
+        if (!isValidPhoneNumber(parsingAnswer[4])) {
             return;
         }
-        if (!isValidGender(parsingAnswer[6])) {
-            System.out.println("Некорректный пол");
-            return;
-        }
-        if (!isValidPhoneNumber(parsingAnswer[5])) {
-            System.out.println("Некорректный номер телефона");
-            return;
-        }
-        if (!isValidBirthDate(parsingAnswer[4])) {
-            System.out.println("Некорректная дата рождения");
+        if (!isValidGender(parsingAnswer[5])) {
             return;
         }
 
@@ -107,16 +105,12 @@ public class main {
     }
 
     // Проверка корректности ФИО
-    public static boolean isValidFullName(String name) throws IllegalArgumentException {
-        try {
-
-            if (name.matches("\\s[А-Яа-я]+\\s")) {
-                return true;
-            }
-        } catch (IllegalArgumentException e) {
-            System.out.println("Некорректное ФИО");
-            return false;
+    public static boolean isValidName(String name) {
+//        Pattern pattern = Pattern.compile("^[А-Я][а-я]*$"); // регулярное выражение для проверки формата
+        if (!name.matches("^[А-Я][а-я]*$")) {
+            throw new IllegalArgumentException("Неверный формат ФИО");
         }
+        return true;
     }
 
     // Проверка корректности номера телефона
@@ -129,12 +123,8 @@ public class main {
     }
 
     // Проверка корректности даты рождения
-    public static boolean isValidBirthDate(String birthDate) throws IllegalArgumentException {
-        if (birthDate.matches(" \\d{2}\\.\\d{2}\\.\\d{4} +")) {
-            return true;
-        } else {
-            throw new IllegalArgumentException("Некорректная дата рождения");
-        }
+    public static boolean isValidBirthDate(String birthDate) {
+        return birthDate.matches("\\d{2}\\.\\d{2}\\.\\d{4}");
     }
 
     // Проверка корректности пола
