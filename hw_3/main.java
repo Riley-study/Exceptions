@@ -29,36 +29,30 @@ public class main {
     public static void main(String[] args) {
         // Запрашиваем у юзера данные в определенном порядке
         String initUserAnswer = requestFromUser();
+
         // парсим полученную строку и проверяем количество элементов в массиве, если количество не совпадает
         // с требованиями, выдает код ошибки и текстовые комментарии, что пошло не так.
 
         String [] parsingAnswer = parsingUserAnswer(initUserAnswer);
-//        for (int i = 0; i < parsingAnswer.length; i++) {
-//            System.out.print("[ " + parsingAnswer[i] + " ] ");
-//        }
-
 
         if (!sizeValidation(parsingAnswer)) {
             return;
         }
+
     // далее проверяем каждый элемент введенных данных с выбрасыванием исключения, если что-то не соответствует запросу
 
         if (!isValidName(parsingAnswer[0])){
             return;
         };
-
         if (!isValidName(parsingAnswer[1])) {
             return;
         }
         if (!isValidName(parsingAnswer[2])) {
             return;
         }
-        if (isValidBirthDate(parsingAnswer[3])){
-            System.out.println("yes");
-        } else {
-            throw new IllegalArgumentException("Некорректная дата рождения");
+        if (!isValidBirthDate(parsingAnswer[3])){
+            return;
         }
-
         if (!isValidPhoneNumber(parsingAnswer[4])) {
             return;
         }
@@ -124,7 +118,12 @@ public class main {
 
     // Проверка корректности даты рождения
     public static boolean isValidBirthDate(String birthDate) {
-        return birthDate.matches("\\d{2}\\.\\d{2}\\.\\d{4}");
+        if (birthDate.matches("\\d{2}\\.\\d{2}\\.\\d{4}")) {
+            return true;
+        } else {
+            throw new IllegalArgumentException("Некорректно введена дата рождения");
+        }
+
     }
 
     // Проверка корректности пола
